@@ -5,7 +5,11 @@
  */
 package br.ulbra.view;
 
+import br.ulbra.DAO.UsuarioDao;
 import br.ulbra.entity.Usuario;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -33,8 +37,8 @@ public class FrLogin extends javax.swing.JFrame {
         jScrollBar1 = new javax.swing.JScrollBar();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        EdEmail = new javax.swing.JTextField();
-        EdSenha = new javax.swing.JPasswordField();
+        edEmail = new javax.swing.JTextField();
+        edSenha = new javax.swing.JPasswordField();
         jLabel3 = new javax.swing.JLabel();
         EdEntrar = new javax.swing.JButton();
         EdSair = new javax.swing.JButton();
@@ -49,6 +53,18 @@ public class FrLogin extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
         jLabel1.setText("SENHA");
+
+        edEmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                edEmailActionPerformed(evt);
+            }
+        });
+
+        edSenha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                edSenhaActionPerformed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
         jLabel3.setText("E-MAIL");
@@ -110,7 +126,7 @@ public class FrLogin extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(EdSenha)
+                            .addComponent(edSenha)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(EdEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -119,7 +135,7 @@ public class FrLogin extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(EdEmail))
+                            .addComponent(edEmail))
                         .addGap(93, 93, 93))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -129,11 +145,11 @@ public class FrLogin extends javax.swing.JFrame {
                 .addGap(39, 39, 39)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(EdEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(edEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(EdSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(edSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(EdEntrar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -162,19 +178,29 @@ if(JOptionPane.showConfirmDialog(null,"Tem certeza?", "Saida do Sistema", JOptio
     }//GEN-LAST:event_EdSairActionPerformed
 
     private void EdEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EdEntrarActionPerformed
-       Usuario usu=new Usuario();
-       String email, senha;
-       email = EdEmail.getText();
-       senha = EdSenha.getText();
-       if(email.equals(usu.getEmailUsu()) && senha.equals(usu.getSenhaUsu())){
-           FrMenu menu =new FrMenu();
-           menu.setVisible(true);
-           this.dispose();
-       }else{
-           JOptionPane.showMessageDialog(null, "E-mail e/ou Senha Invalido!");
-       }
-      
+       UsuarioDao dao = null;
+        try {
+            dao = new UsuarioDao();
+            if (dao.checkLogin(edEmail.getText(), 
+                    edSenha.getText())) {
+                new FrMenu().setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, 
+                        "E-mail ou Senha está incorreta!");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FrLogin.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_EdEntrarActionPerformed
+
+    private void edSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edSenhaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_edSenhaActionPerformed
+
+    private void edEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edEmailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_edEmailActionPerformed
 
     /**
      * @param args the command line arguments
@@ -212,10 +238,10 @@ if(JOptionPane.showConfirmDialog(null,"Tem certeza?", "Saida do Sistema", JOptio
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField EdEmail;
     private javax.swing.JButton EdEntrar;
     private javax.swing.JButton EdSair;
-    private javax.swing.JPasswordField EdSenha;
+    private javax.swing.JTextField edEmail;
+    private javax.swing.JPasswordField edSenha;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
