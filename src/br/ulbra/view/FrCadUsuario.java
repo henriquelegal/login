@@ -5,7 +5,11 @@
  */
 package br.ulbra.view;
 
+import br.ulbra.DAO.UsuarioDao;
 import br.ulbra.entity.Usuario;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -168,16 +172,23 @@ public class FrCadUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_edEmailActionPerformed
 
     private void btSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarActionPerformed
-Usuario u=new Usuario();
-UsuarioDAO uDAO= new usuarioDAO();
-u.setNomeUsu(edNome.getText());
-u.setEmailUsu(edEmail.getText());
-u.setSenhaUsu(edSenha.getText());
-uDAO.create(u);
+        Usuario u = new Usuario();
+        UsuarioDao uDao;
+        u.setNomeUsu(edNome.getText());
+        u.setEmailUsu(edEmail.getText());
+        u.setSenhaUsu(edSenha.getText());
+
+        try {
+            uDao = new UsuarioDao();
+            uDao.create(u);
+        } catch (SQLException ex) {
+            Logger.getLogger(FrCadUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }//GEN-LAST:event_btSalvarActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-    
+dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
